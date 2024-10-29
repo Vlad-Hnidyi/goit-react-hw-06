@@ -4,24 +4,28 @@ import * as Yup from "yup";
 import { useId } from "react";
 
 import css from "./ContactForm.module.css";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../redux/contactsSlice";
 
-const ContactForm = ({ onAddContact }) => {
-  const FormSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(3, "Too Short!")
-      .max(40, "Too Long!")
-      .required("Required"),
-    number: Yup.string()
-      .min(3, "Too Short!")
-      .max(20, "Too Long!")
-      .required("Required"),
-  });
+const FormSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "Too Short!")
+    .max(40, "Too Long!")
+    .required("Required"),
+  number: Yup.string()
+    .min(3, "Too Short!")
+    .max(20, "Too Long!")
+    .required("Required"),
+});
+
+const ContactForm = () => {
   const nameFieldId = useId();
   const phoneFieldId = useId();
+  const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
     const newContactWithId = { ...values, id: nanoid() };
-    onAddContact(newContactWithId);
+    dispatch(addUser(newContactWithId));
     actions.resetForm();
   };
 
